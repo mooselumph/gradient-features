@@ -1,0 +1,22 @@
+
+# dockerfile --> image
+
+docker build 
+
+# image --> container
+
+docker create
+
+# image --> build container and start
+
+docker run --gpus all -d -t --name CONTAINER_NAME --mount type=bind,source="$(pwd)"/code/jax,target=/app IMAGE_ID
+docker run --gpus all -d -t --name CONTAINER_NAME --mount type=bind,source="$(pwd)"/code/jax,target=/app REPOSITORY:VERSION (e.g jax:latest)
+
+# Start and stop container
+
+docker stop CONTAINER_NAME
+docker start CONTAINER_NAME
+
+# Login to running container
+
+docker exec -it CONTAINER_NAME /bin/bash
