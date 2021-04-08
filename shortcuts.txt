@@ -20,3 +20,10 @@ docker start CONTAINER_NAME
 # Login to running container
 
 docker exec -it CONTAINER_NAME /bin/bash
+
+# Jupyter / CUDA images
+
+docker build --tag nvidia-jupyter --build-arg ROOT_CONTAINER=nvidia/cuda:10.1-cudnn7-devel https://github.com/jupyter/docker-stacks.git#master:base-notebook
+
+ssh -L 8888:localhost:8888 USER@hilbert.ee.washington.edu
+docker run --gpus all -p 8888:8888 jax-jupyter
