@@ -23,7 +23,13 @@ docker exec -it CONTAINER_NAME /bin/bash
 
 # Jupyter / CUDA images
 
-docker build --tag nvidia-jupyter --build-arg ROOT_CONTAINER=nvidia/cuda:10.1-cudnn7-devel https://github.com/jupyter/docker-stacks.git#master:base-notebook
+docker build --tag nvidia-jupyter:latest --build-arg ROOT_CONTAINER=nvidia/cuda:10.1-cudnn7-devel --build-arg NB_UID=1011 --build-arg NB_GID=1011 https://github.com/jupyter/docker-stacks.git#master:base-notebook
 
 ssh -L 8888:localhost:8888 USER@hilbert.ee.washington.edu
-docker run --gpus all -p 8888:8888 jax-jupyter
+docker run --gpus all -p 8888:8888 -v "$(pwd)"/code/gradient-features/app:/home/jovyan/work objax-jupyter
+
+docker run --user root --gpus all -p 8888:8888 -v "$(pwd)"/code/gradient-features/app:/home/jovyan/work -e NB_UID=1008 -e NB_GID=1008 -e CHOWN_HOME=yes objax-jupyter
+
+
+# Remove exited containers
+docker rm $(docker ps -a -f status=exited -q)
